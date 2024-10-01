@@ -1,5 +1,23 @@
-GET http://localhost:3333/users
+GET http://localhost:3333/users?search=diego
 
 ###
 
 POST http://localhost:3333/users
+
+{
+  "name": "Diego Madalosso",
+  "email": "vitor@nodejs.com"
+}
+
+###
+
+PUT http://localhost:3333/users/df1a102b-c447-4daf-83c2-7fdd4b41e512
+
+{
+  "name": "Vitor madalosso",
+  "email": "vitinho@node.commmm2mm"
+}
+
+###
+
+DELETE http://localhost:3333/users/6c2545cd-01a4-443c-ac4c-15c2b9c1aea9

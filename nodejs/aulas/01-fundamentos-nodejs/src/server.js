@@ -1,4 +1,8 @@
 import http from 'node:http' // Note que o node:http é a forma recomendada a partir das versões mais recentes do Node.js, onde você pode usar o prefixo node: para identificar módulos internos.
+import { Database } from './database.js'
+import { json } from './middlewares/json.js'
+import { routes } from './routes.js'
+import { extractQueryParams } from './utils/extract-query-params.js'
 
 // HTTP
 // - Method HTTP
@@ -16,25 +20,30 @@ import http from 'node:http' // Note que o node:http é a forma recomendada a pa
 
 // HTTP Status Code
 
-const users = []
+// Query Parameters: URL Stateful => Filtros, paginação, não-obrigatórios
+// Route Parameters: Identificação de recurso
+// Request Body: Envio de informações de um formulário (HTTPs)
 
-const server = http.createServer((req, res) => {
+const database = new Database()
+
+const server = http.createServer(async (req, res) => {
   const { method, url } = req
 
-  if (method === 'GET' && url === '/users') {
-    return res
-      .setHeader('Content-type', 'application/json')
-      .end(JSON.stringify(users))
-  }
+  await json(req, res)
 
-  if (method === 'POST' && url ==='/users') {
-    users.push({
-      id: 1,
-      name: 'Vitor Madalosso',
-      email: 'vmadalosso@node.com'
-    })
+  const route = routes.find(route => {
+    return route.method === method && route.path.test(url)
+  })
 
-    return res.writeHead(201).end()
+  if (route) {
+      const routeParams = req.url.match(route.path)
+
+      const { query, ...params } = routeParams.groups
+
+      req.params = params
+      req.query = query ? extractQueryParams(query) : {}
+
+    return route.handler(req, res)
   }
 
   return res.writeHead(404).end()
