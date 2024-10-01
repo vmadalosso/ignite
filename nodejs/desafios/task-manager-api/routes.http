@@ -1,0 +1,14 @@
+GET http://localhost:3333/tasks
+
+###
+
+POST http://localhost:3333/tasks
+
+{
+  "title": "Estudar",
+  "description": "Estudar Nodejs pra ver se eu viro alguma bosta na vida"
+}
+
+###
+
+DELETE http://localhost:3333/tasks/71a882cf-7941-47f8-abea-bf41b42cc55a
