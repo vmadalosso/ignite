@@ -25,15 +25,80 @@ export const routes = [
     handler: (req, res) => {
       const { title, description } = req.body
 
+      const now = new Date().toString()
+
       const task = {
         id: randomUUID(),
         title,
-        description
+        description,
+        completed_at: null,
+        created_at: now,
+        updated_at: now
       }
 
       database.insert('tasks', task)
 
       return res.writeHead(201).end()
+    }
+  },
+  {
+    method: 'PUT',
+    path: buildRoutePath('/tasks/:id'),
+    handler: (req, res) => {
+      const { id } = req.params
+      const { title, description } = req.body
+
+      // Verifica se a task existe
+      const tasks = database.select('tasks')
+      const taskIndex = tasks.findIndex(task => task.id == id)
+
+      if (taskIndex === -1) {
+        return res.writeHead(404).end(JSON.stringify({ error: 'Task not found' }))
+      }
+
+      // Obter a tarefa atual
+      const taskToUpdate = tasks[taskIndex]
+
+      // Define um objeto para armazenar as atualizações
+      const updates = {}
+
+      if (title) {
+        taskToUpdate.title = title
+      }
+
+      if (description) {
+        taskToUpdate.description = description
+      }
+
+      // Atualiza a data de alteração
+      taskToUpdate.updated_at = new Date().toISOString()
+
+      //Persistindo a task atualizada no banco de dados
+      database.update('tasks', id, updates)
+
+      return res.writeHead(200).end(JSON.stringify(taskToUpdate))
+    }
+  },
+  {
+    method: 'PATCH',
+    path: buildRoutePath('/tasks/:id/complete'),
+    handler: (req, res) => {
+      const { id } = req.params
+
+      const task = database.select('tasks').find(task => task.id == id)
+
+      if (!task) {
+        return res.writeHead(404).end(JSON.stringify({ error: 'Task not found' }))
+      }
+
+      const now = new Date().toISOString()
+
+      task.completed_at = now
+      task.updated_at = now
+
+      database.update('tasks', id, task)
+
+      return res.writeHead(204).end()
     }
   },
   {

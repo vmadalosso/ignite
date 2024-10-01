@@ -5,10 +5,22 @@ GET http://localhost:3333/tasks
 POST http://localhost:3333/tasks
 
 {
-  "title": "Estudar",
-  "description": "Estudar Nodejs pra ver se eu viro alguma bosta na vida"
+  "title": "Estudar RN",
+  "description": "Trilha RN"
 }
 
 ###
 
-DELETE http://localhost:3333/tasks/71a882cf-7941-47f8-abea-bf41b42cc55a
+PUT http://localhost:3333/tasks/6672fe74-7184-4f8e-b7f8-1a82926e1045
+
+{
+  "description": "Trilha Flutter"
+}
+
+###
+
+PATCH http://localhost:3333/tasks/6672fe74-7184-4f8e-b7f8-1a82926e1045/complete
+
+###
+
+DELETE http://localhost:3333/tasks/713a7873-1f22-4cf6-8c0c-b0e180e287cd
