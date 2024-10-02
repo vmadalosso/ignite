@@ -5,22 +5,22 @@ GET http://localhost:3333/tasks
 POST http://localhost:3333/tasks
 
 {
-  "title": "Estudar RN",
+  "title": "Estudar React",
   "description": "Trilha RN"
 }
 
 ###
 
-PUT http://localhost:3333/tasks/6672fe74-7184-4f8e-b7f8-1a82926e1045
+PUT http://localhost:3333/tasks/30d1995d-6389-4246-a2b7-baa8b9ab396a
 
 {
-  "description": "Trilha Flutter"
+  "description": "Trilha REACT JS"
 }
 
 ###
 
-PATCH http://localhost:3333/tasks/6672fe74-7184-4f8e-b7f8-1a82926e1045/complete
+PATCH http://localhost:3333/tasks/db840350-6afb-4a1a-a3f0-c6c57e9a8142/complete
 
 ###
 
-DELETE http://localhost:3333/tasks/713a7873-1f22-4cf6-8c0c-b0e180e287cd
+DELETE http://localhost:3333/tasks/d4436755-8786-4367-9149-4685595736a0

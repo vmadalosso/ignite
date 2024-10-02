@@ -1,6 +1,5 @@
 import fs from 'node:fs'
 import { parse } from 'csv-parse'
-import { request } from 'node:http'
 
 const csvFilePath = new URL('./tasks.csv', import.meta.url) // Este caminho deve permanecer o mesmo, já que está sendo referenciado a partir de streams/import-tasks.js
 
@@ -15,35 +14,30 @@ async function importTasks() {
   for await (const record of parser) {
     const { title, description } = record
 
-    // Fazendo a requisição POST para /tasks
-    const req = request(
-      {
-        hostname: 'localhost', // O hostname do seu servidor
-        port: 3333, // A porta do seu servidor
-        path: '/tasks',
+    try {
+      const response = await fetch('http://localhost:3333/tasks', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-      },
-      (res) => {
-        let body = ''
-        res.on('data', chunk => {
-          body += chunk
-        })
-        res.on('end', () => {
-          console.log(`Task imported: ${title}, Response: ${body}`)
-        })
+        body: JSON.stringify({ title, description }),
+      })
+
+      if (response.ok) {
+        const responseBody = await response.text()
+
+        if (responseBody) {
+          const json = JSON.parse(responseBody)
+          console.log(`Task imported: ${title}, Response:`, json)
+        } else {
+          console.log(`Task imported: ${title}, but response body is empty`)
+        }
+      } else {
+        console.error(`Failed to import task: ${title}. Status: ${response.status}`)
       }
-    )
-
-    req.on('error', (error) => {
+    } catch (error) {
       console.error('Error making request:', error.message)
-    })
-
-    // Enviando o corpo da requisição
-    req.write(JSON.stringify({ title, description }))
-    req.end()
+    }
   }
 }
 

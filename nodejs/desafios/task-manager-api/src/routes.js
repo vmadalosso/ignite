@@ -25,15 +25,13 @@ export const routes = [
     handler: (req, res) => {
       const { title, description } = req.body
 
-      const now = new Date().toString()
-
       const task = {
         id: randomUUID(),
         title,
         description,
         completed_at: null,
-        created_at: now,
-        updated_at: now
+        created_at: new Date(),
+        updated_at: new Date()
       }
 
       database.insert('tasks', task)
@@ -91,10 +89,8 @@ export const routes = [
         return res.writeHead(404).end(JSON.stringify({ error: 'Task not found' }))
       }
 
-      const now = new Date().toISOString()
-
-      task.completed_at = now
-      task.updated_at = now
+      task.completed_at = new Date()
+      task.updated_at = new Date()
 
       database.update('tasks', id, task)
 
