@@ -1,2 +1,14 @@
+# Arquivos de sistema
 .DS_Store
-node_modules
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Dependências
+node_modules/
+
+# Build outputs
+dist/
+build/
