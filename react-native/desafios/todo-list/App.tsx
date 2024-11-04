@@ -1,17 +1,20 @@
-import { StatusBar, View } from 'react-native'
+import { StatusBar } from 'react-native'
 import {
   useFonts,
+  // eslint-disable-next-line camelcase
   Inter_400Regular,
+  // eslint-disable-next-line camelcase
   Inter_700Bold,
 } from '@expo-google-fonts/inter'
 
 import { Home } from '@/screens/Home'
 import { Loading } from '@/components/Loading'
-import { Header } from '@/components/Header'
 
 export default function App() {
   const [fontsLoaded] = useFonts({
+    // eslint-disable-next-line camelcase
     Inter_400Regular,
+    // eslint-disable-next-line camelcase
     Inter_700Bold,
   })
 
@@ -20,10 +23,13 @@ export default function App() {
   }
 
   return (
-    <View className="bg-gray-600 flex-1">
+    <>
       <Home />
-      <Header />
-      <StatusBar barStyle={'light-content'} />
-    </View>
+      <StatusBar
+        barStyle={'light-content'}
+        backgroundColor="transparent"
+        translucent
+      />
+    </>
   )
 }
